@@ -7,7 +7,7 @@ import { createReadStream } from "fs";
 import { createArchiveStream } from "../lib/index.js";
 
 const archiveStream = createArchiveStream();
-const rs = createReadStream("test.deb");
+const rs = createReadStream("tests/example.deb");
 rs.pipe(archiveStream);
 
 archiveStream.on("data", (x) => console.log(x));

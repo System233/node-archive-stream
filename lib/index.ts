@@ -50,6 +50,7 @@ class ArchiveStream extends Transform {
   headerParsed = false;
   next = ARCHIVE_MAGIC_SIZE;
   current = 0;
+  position = 0;
   buffer: Buffer[] = [];
   entry: IArchiveEntry | null = null;
   constructor(opts?: TransformOptions) {
@@ -62,7 +63,7 @@ class ArchiveStream extends Transform {
   ): void {
     this.buffer.push(chunk);
     this.current += chunk.byteLength;
-
+    this.position += chunk.byteLength;
     if (this.current >= this.next) {
       this.parse(callback);
     } else {
@@ -92,7 +93,14 @@ class ArchiveStream extends Transform {
     if (!this.headerParsed) {
       const header = nextField(ARCHIVE_MAGIC_SIZE, "buffer");
       if (ARCHIVE_MAGIC.compare(header) != 0) {
-        callback(new Error("ArchiveStream: Bad Magic: " + inspect(header)));
+        callback(
+          new Error(
+            "ArchiveStream: Bad Magic: " +
+              inspect(header) +
+              " at " +
+              this.position
+          )
+        );
         return;
       }
       //   offset += ARCHIVE_MAGIC_SIZE;
@@ -112,7 +120,15 @@ class ArchiveStream extends Transform {
         };
         const end = nextField(ARCHIVE_FIELD_END_SIZE, "buffer");
         if (ARCHIVE_END.compare(end) != 0) {
-          callback(new Error("ArchiveStream: Bad End: " + inspect(end)));
+          callback(
+            new Error(
+              "ArchiveStream: Bad End: " +
+                inspect(end) +
+                " at " +
+                this.position +
+                offset
+            )
+          );
           return;
         }
         this.next = this.entry.size;
@@ -124,6 +140,7 @@ class ArchiveStream extends Transform {
       }
     }
     this.buffer = [data.subarray(offset)];
+    this.current = data.byteLength - offset;
     callback();
   }
 }
