@@ -1,10 +1,10 @@
 {
   "name": "archive-stream",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Archive Stream Implementation of Node.js",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/System233/node-archive-stream.git"
