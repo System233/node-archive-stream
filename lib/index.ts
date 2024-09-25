@@ -199,7 +199,7 @@ class UnArchiveStream extends Transform {
           callback();
         });
       }
-    } catch (err) {
+    } catch (err: any) {
       callback(err);
     }
   }
