@@ -5,7 +5,10 @@
   "description": "Archive Stream Implementation of Node.js",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": "git+https://github.com/System233/node-archive-stream.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/System233/node-archive-stream.git"
+  },
   "author": "System233",
   "license": "MIT",
   "keywords": [
